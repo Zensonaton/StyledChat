@@ -1,26 +1,35 @@
 package eu.pb4.styledchat;
 
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
+
+import org.jetbrains.annotations.NotNull;
+
 import eu.pb4.placeholders.PlaceholderAPI;
 import eu.pb4.placeholders.TextParser;
 import eu.pb4.placeholders.util.GeneralUtils;
 import eu.pb4.placeholders.util.TextParserUtils;
 import eu.pb4.styledchat.config.Config;
 import eu.pb4.styledchat.config.ConfigManager;
+import eu.pb4.styledchat.config.data.ConfigData.ChatChannel;
 import me.lucko.fabric.api.permissions.v0.Permissions;
+import net.minecraft.entity.Entity;
+import net.minecraft.network.MessageType;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.PlayerManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.*;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
 
 public final class StyledChatUtils {
     public static final String IGNORED_TEXT_KEY = "styled.chat.ignored.text.if.you.see.it.some.mod.is.bad";
@@ -49,7 +58,6 @@ public final class StyledChatUtils {
 
     public static final String FORMAT_PERMISSION_BASE = "styledchat.format.";
     public static final Pattern EMOTE_PATTERN = Pattern.compile("[:](?<id>[^:]+)[:]");
-    ;
 
     public static Text parseText(String input) {
         return !input.isEmpty() ? TextParser.parse(input) : IGNORED_TEXT;
@@ -236,4 +244,81 @@ public final class StyledChatUtils {
             return PlaceholderAPI.parseText(text, this.server);
         }
     }
+
+	/**
+	 * Attempts to get chat channel for sending messages.
+	 * @param text Original text message of the sent message, used for searching by "usage prefix".
+	 * @return Channel, in which message should be sent.
+	 * @param actionType Any of next ones: <code>chat, death, tameable_death, advancement_challenge, advancement_task, advancement_goal, leave, join, join_first_time, join_renamed</code>.
+	 */
+	public static ChatChannel getChatChannel(String text, MessageActionType actionType) {
+		Config config = ConfigManager.getConfig();
+		ChatChannel defaultChannel = null;
+
+		if (!config.configData.chatChannelsEnabled) return null;
+
+		if (text == null) text = "";
+
+		for (var channel : config.configData.chatChannels) {
+			if (!channel.enabled) continue;
+
+			if (!channel.messageTypesIncluded.contains(actionType.getValue())) continue;
+
+			if (channel.isDefault) defaultChannel = channel;
+
+			if (text.startsWith(channel.usagePrefix)) return channel;
+		}
+
+		return defaultChannel;
+	}
+
+	public enum MessageActionType {
+		CHAT("chat"),
+		DEATH("death"),
+		TAMEABLE_DEATH("tameable_death"),
+		ADVANCEMENT_CHALLENGE("advancement_challenge"),
+		ADVANCEMENT_TASK("advancement_task"),
+		ADVANCEMENT_GOAL("advancement_goal"),
+		LEAVE("leave"),
+		JOIN("join"),
+		JOIN_FIRST_TIME("join_first_time"),
+		JOIN_RENAMED("join_renamed");
+
+		private final String name;
+
+		MessageActionType(String name) {
+			this.name = name;
+		}
+
+		public String getValue() {
+			return name;
+		}
+	}
+
+	/**
+	 * Broadcasts message to players in the server and server console.
+	 * @param playerManager
+	 * @param text
+	 * @param filteredText
+	 * @param messageType
+	 * @param sender
+	 * @param channel
+	 */
+	public static void broadcast(PlayerManager playerManager, Text text, Text filteredText, MessageType messageType, Entity sender, ChatChannel channel) {
+        playerManager.getServer().sendSystemMessage(text, sender.getUuid());
+
+        for (ServerPlayerEntity reciever : playerManager.getPlayerList()) {
+			boolean filtered = false;
+			if (channel != null && sender != null) {
+				// We have a channel specified, this means that we can show message to specific players.
+
+				if (channel.onlyInSameDimension && !sender.getWorld().getDimension().equals(reciever.getWorld().getDimension())) continue;
+				if (channel.radius > 0 && sender.distanceTo(reciever) > channel.radius) continue;
+			}
+
+			StyledChatEvents.MESSAGE_TO_SEND.invoker().onMessageTo(filtered ? filteredText : text, sender, reciever, filtered);
+
+            reciever.sendMessage(text, messageType, sender.getUuid());
+        }
+	}
 }

@@ -1,15 +1,31 @@
 package eu.pb4.styledchat.config.data;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import eu.pb4.placeholders.TextParser;
 import eu.pb4.styledchat.StyledChatUtils;
 import eu.pb4.styledchat.config.ConfigManager;
 import net.minecraft.util.Formatting;
 
-import java.util.*;
-
 public class ConfigData {
     public int CONFIG_VERSION_DONT_TOUCH_THIS = ConfigManager.VERSION;
     public String _comment = "Before changing anything, see https://github.com/Patbox/StyledChat#configuration";
+	public List<String> __comment = Arrays.asList(
+		"Description of a Chat Channels feature:",
+		"",
+		"'enabled' specifies if this channel is enabled or not.",
+		"'isDefault' specifies whenever channel should be used by default in certain situations. See 'usagePrefix' for more info.",
+		"'radius' radius, in which players can 'hear' eachother. Values less than 1 counts as infinity.",
+		"'onlyInSameDimension' specifies, if players can 'hear' eachother if they are in the same dimension.",
+		"'usagePrefix' prefix used for sending message in this channel. For example, value of '!' will make all messages starting with '!' to be sent in this channel. After sending, '!' will be removed automatically from sent message.",
+		"'prefix' prefix for sent message. E.g., if prefix is set to '[Global] ', then all messages in this channel will look like this: '[Global] <Username> message'.",
+		"'messageTypesIncluded' types for messages that will be sent in this channel. Valid values are: ['chat', 'death', 'tameable_death', 'advancement_challenge', 'advancement_task', 'advancement_goal', 'leave', 'join', 'join_first_time', 'join_renamed']"
+	);
     public ChatStyleData defaultStyle = ChatStyleData.DEFAULT;
     public List<PermissionPriorityStyle> permissionStyles = new ArrayList<>();
     public String petDeathMessage = "${default_message}";
@@ -27,6 +43,9 @@ public class ConfigData {
     public String spoilerStyle = "<gray>${spoiler}";
     public String spoilerSymbol = "▌";
     public HashMap<String, Boolean> defaultEnabledFormatting = getDefaultFormatting();
+
+	public boolean chatChannelsEnabled = false;
+	public List<ChatChannel> chatChannels = new ArrayList<>();
 
 
     private static HashMap<String, Boolean> getDefaultFormatting() {
@@ -110,4 +129,14 @@ public class ConfigData {
         @Deprecated
         public Map<String, String> emotes = null;
     }
+
+	public static class ChatChannel {
+		public boolean enabled = true;
+		public boolean isDefault = false;
+		public int radius = 0;
+		public boolean onlyInSameDimension = false;
+		public String usagePrefix = "";
+		public String prefix = "";
+		public List<String> messageTypesIncluded = Arrays.asList("chat");
+	}
 }

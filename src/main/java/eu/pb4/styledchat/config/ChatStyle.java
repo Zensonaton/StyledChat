@@ -1,15 +1,16 @@
 package eu.pb4.styledchat.config;
 
+import java.util.Map;
+
 import eu.pb4.placeholders.PlaceholderAPI;
 import eu.pb4.styledchat.StyledChatUtils;
 import eu.pb4.styledchat.config.data.ChatStyleData;
+import eu.pb4.styledchat.config.data.ConfigData.ChatChannel;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-
-import java.util.Map;
 
 public class ChatStyle {
     public final Text displayName;
@@ -46,7 +47,6 @@ public class ChatStyle {
         this.teamChatReceived = data.teamChatReceived != null ? StyledChatUtils.parseText(data.teamChatReceived) : defaultStyle.teamChatReceived;
         this.sayCommand = data.sayCommand != null ? StyledChatUtils.parseText(data.sayCommand) : defaultStyle.sayCommand;
         this.meCommand = data.meCommand != null ? StyledChatUtils.parseText(data.meCommand) : defaultStyle.meCommand;
-
     }
 
     public ChatStyle(ChatStyleData data) {
@@ -87,132 +87,150 @@ public class ChatStyle {
         );
     }
 
-    public Text getChat(ServerPlayerEntity player, Text message) {
+    public Text getChat(ServerPlayerEntity player, Text message, ChatChannel channel) {
         if (this.chat == null) {
             return null;
         } else if (this.chat == StyledChatUtils.IGNORED_TEXT) {
             return StyledChatUtils.IGNORED_TEXT;
         }
 
+		Config config = ConfigManager.getConfig();
+
         return PlaceholderAPI.parsePredefinedText(
-                PlaceholderAPI.parseText(this.chat, player),
+                PlaceholderAPI.parseText(StyledChatUtils.parseText((channel == null ? "" : channel.prefix) + config.configData.defaultStyle.chat), player),
                 PlaceholderAPI.PREDEFINED_PLACEHOLDER_PATTERN,
                 Map.of("player", player.getDisplayName(),
                         "message", message)
         );
     }
 
-    public Text getJoin(ServerPlayerEntity player) {
+    public Text getJoin(ServerPlayerEntity player, ChatChannel channel) {
         if (this.join == null) {
             return null;
         } else if (this.join == StyledChatUtils.IGNORED_TEXT) {
             return StyledChatUtils.IGNORED_TEXT;
         }
 
+		Config config = ConfigManager.getConfig();
+
         return PlaceholderAPI.parsePredefinedText(
-                PlaceholderAPI.parseText(this.join, player),
+                PlaceholderAPI.parseText(StyledChatUtils.parseText((channel == null ? "" : channel.prefix) + config.configData.defaultStyle.join), player),
                 PlaceholderAPI.PREDEFINED_PLACEHOLDER_PATTERN,
                 Map.of("player", player.getDisplayName())
         );
     }
 
-    public Text getJoinFirstTime(ServerPlayerEntity player) {
+    public Text getJoinFirstTime(ServerPlayerEntity player, ChatChannel channel) {
         if (this.joinFirstTime == null) {
             return null;
         } else if (this.joinFirstTime == StyledChatUtils.IGNORED_TEXT) {
             return StyledChatUtils.IGNORED_TEXT;
         }
 
+		Config config = ConfigManager.getConfig();
+
         return PlaceholderAPI.parsePredefinedText(
-                PlaceholderAPI.parseText(this.joinFirstTime, player),
+                PlaceholderAPI.parseText(StyledChatUtils.parseText((channel == null ? "" : channel.prefix) + config.configData.defaultStyle.joinFirstTime), player),
                 PlaceholderAPI.PREDEFINED_PLACEHOLDER_PATTERN,
                 Map.of("player", player.getDisplayName())
         );
     }
 
-    public Text getJoinRenamed(ServerPlayerEntity player, String oldName) {
+    public Text getJoinRenamed(ServerPlayerEntity player, String oldName, ChatChannel channel) {
         if (this.joinRenamed == null) {
             return null;
         } else if (this.joinRenamed == StyledChatUtils.IGNORED_TEXT) {
             return StyledChatUtils.IGNORED_TEXT;
         }
 
+		Config config = ConfigManager.getConfig();
+
         return PlaceholderAPI.parsePredefinedText(
-                PlaceholderAPI.parseText(this.joinRenamed, player),
+                PlaceholderAPI.parseText(StyledChatUtils.parseText((channel == null ? "" : channel.prefix) + config.configData.defaultStyle.joinRenamed), player),
                 PlaceholderAPI.PREDEFINED_PLACEHOLDER_PATTERN,
                 Map.of("player", player.getDisplayName(),
                         "old_name", new LiteralText(oldName))
         );
     }
 
-    public Text getLeft(ServerPlayerEntity player) {
+    public Text getLeft(ServerPlayerEntity player, ChatChannel channel) {
         if (this.left == null) {
             return null;
         } else if (this.left == StyledChatUtils.IGNORED_TEXT) {
             return StyledChatUtils.IGNORED_TEXT;
         }
 
+		Config config = ConfigManager.getConfig();
+
         return PlaceholderAPI.parsePredefinedText(
-                PlaceholderAPI.parseText(this.left, player),
+                PlaceholderAPI.parseText(StyledChatUtils.parseText((channel == null ? "" : channel.prefix) + config.configData.defaultStyle.left), player),
                 PlaceholderAPI.PREDEFINED_PLACEHOLDER_PATTERN,
                 Map.of("player", player.getDisplayName())
         );
     }
 
-    public Text getDeath(ServerPlayerEntity player, Text vanillaMessage) {
+    public Text getDeath(ServerPlayerEntity player, Text vanillaMessage, ChatChannel channel) {
         if (this.death == null) {
             return null;
         } else if (this.death == StyledChatUtils.IGNORED_TEXT) {
             return StyledChatUtils.IGNORED_TEXT;
         }
 
+		Config config = ConfigManager.getConfig();
+
         return PlaceholderAPI.parsePredefinedText(
-                PlaceholderAPI.parseText(this.death, player),
+                PlaceholderAPI.parseText(StyledChatUtils.parseText((channel == null ? "" : channel.prefix) + config.configData.defaultStyle.death), player),
                 PlaceholderAPI.PREDEFINED_PLACEHOLDER_PATTERN,
                 Map.of("player", player.getDisplayName(),
                         "default_message", vanillaMessage)
         );
     }
 
-    public Text getAdvancementGoal(ServerPlayerEntity player, Text advancement) {
+    public Text getAdvancementGoal(ServerPlayerEntity player, Text advancement, ChatChannel channel) {
         if (this.advancementGoal == null) {
             return null;
         } else if (this.advancementGoal == StyledChatUtils.IGNORED_TEXT) {
             return StyledChatUtils.IGNORED_TEXT;
         }
 
+		Config config = ConfigManager.getConfig();
+
         return PlaceholderAPI.parsePredefinedText(
-                PlaceholderAPI.parseText(this.advancementGoal, player),
+                PlaceholderAPI.parseText(StyledChatUtils.parseText((channel == null ? "" : channel.prefix) + config.configData.defaultStyle.advancementGoal), player),
                 PlaceholderAPI.PREDEFINED_PLACEHOLDER_PATTERN,
                 Map.of("player", player.getDisplayName(),
                         "advancement", advancement)
         );
     }
 
-    public Text getAdvancementTask(ServerPlayerEntity player, Text advancement) {
+    public Text getAdvancementTask(ServerPlayerEntity player, Text advancement, ChatChannel channel) {
         if (this.advancementTask == null) {
             return null;
-        }else if (this.advancementTask == StyledChatUtils.IGNORED_TEXT) {
+        } else if (this.advancementTask == StyledChatUtils.IGNORED_TEXT) {
             return StyledChatUtils.IGNORED_TEXT;
         }
 
+		Config config = ConfigManager.getConfig();
+
         return PlaceholderAPI.parsePredefinedText(
-                PlaceholderAPI.parseText(this.advancementTask, player),
+                PlaceholderAPI.parseText(StyledChatUtils.parseText((channel == null ? "" : channel.prefix) + config.configData.defaultStyle.advancementTask), player),
                 PlaceholderAPI.PREDEFINED_PLACEHOLDER_PATTERN,
                 Map.of("player", player.getDisplayName(),
                         "advancement", advancement)
         );
     }
 
-    public Text getAdvancementChallenge(ServerPlayerEntity player, Text advancement) {
+    public Text getAdvancementChallenge(ServerPlayerEntity player, Text advancement, ChatChannel channel) {
         if (this.advancementChallenge == null) {
             return null;
-        }else if (this.advancementChallenge == StyledChatUtils.IGNORED_TEXT) {
+        } else if (this.advancementChallenge == StyledChatUtils.IGNORED_TEXT) {
             return StyledChatUtils.IGNORED_TEXT;
         }
 
+		Config config = ConfigManager.getConfig();
+
         return PlaceholderAPI.parsePredefinedText(
-                PlaceholderAPI.parseText(this.advancementChallenge, player),
+                PlaceholderAPI.parseText(StyledChatUtils.parseText((channel == null ? "" : channel.prefix) + config.configData.defaultStyle.advancementChallenge), player),
                 PlaceholderAPI.PREDEFINED_PLACEHOLDER_PATTERN,
                 Map.of("player", player.getDisplayName(),
                         "advancement", advancement)

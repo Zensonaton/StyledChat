@@ -1,6 +1,14 @@
 package eu.pb4.styledchat.mixin;
 
+import java.util.Map;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 import com.mojang.brigadier.context.CommandContext;
+
 import eu.pb4.placeholders.PlaceholderAPI;
 import eu.pb4.placeholders.TextParser;
 import eu.pb4.styledchat.StyledChatUtils;
@@ -9,15 +17,6 @@ import net.minecraft.server.command.MeCommand;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import org.jetbrains.annotations.NotNull;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.AbstractMap;
-import java.util.Map;
-import java.util.Set;
 
 @Mixin(MeCommand.class)
 public class MeCommandMixin {

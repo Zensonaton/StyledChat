@@ -1,8 +1,12 @@
 package eu.pb4.styledchat.command;
 
 
+import static net.minecraft.server.command.CommandManager.argument;
+import static net.minecraft.server.command.CommandManager.literal;
+
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+
 import eu.pb4.styledchat.StyledChatMod;
 import eu.pb4.styledchat.StyledChatUtils;
 import eu.pb4.styledchat.config.ConfigManager;
@@ -14,9 +18,6 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
-
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
 
 public class Commands {
     public static void register() {

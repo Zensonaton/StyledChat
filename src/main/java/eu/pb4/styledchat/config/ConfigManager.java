@@ -1,16 +1,23 @@
 package eu.pb4.styledchat.config;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.io.IOUtils;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import eu.pb4.styledchat.StyledChatMod;
 import eu.pb4.styledchat.config.data.ConfigData;
 import eu.pb4.styledchat.config.data.VersionConfigData;
 import eu.pb4.styledchat.config.data.old.ConfigDataV1;
 import net.fabricmc.loader.api.FabricLoader;
-import org.apache.commons.io.IOUtils;
-
-import java.io.*;
-import java.nio.charset.StandardCharsets;
 
 public class ConfigManager {
     public static final int VERSION = 2;

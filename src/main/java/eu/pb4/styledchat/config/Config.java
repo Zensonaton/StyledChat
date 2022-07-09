@@ -1,23 +1,23 @@
 package eu.pb4.styledchat.config;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import eu.pb4.placeholders.PlaceholderAPI;
 import eu.pb4.placeholders.TextParser;
 import eu.pb4.styledchat.StyledChatUtils;
 import eu.pb4.styledchat.config.data.ChatStyleData;
 import eu.pb4.styledchat.config.data.ConfigData;
+import eu.pb4.styledchat.config.data.ConfigData.ChatChannel;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public final class Config {
     public final ConfigData configData;
@@ -61,7 +61,6 @@ public final class Config {
             this.permissionEmotes.add(emotes);
         }
 
-
         this.defaultFormattingCodes = new Object2BooleanArrayMap<>(this.configData.defaultEnabledFormatting);
     }
 
@@ -78,125 +77,125 @@ public final class Config {
         return this.defaultStyle.getDisplayName(player, vanillaDisplayName);
     }
 
-    public Text getChat(ServerPlayerEntity player, Text message) {
+    public Text getChat(ServerPlayerEntity player, Text message, ChatChannel channel) {
         ServerCommandSource source = player.getCommandSource();
         for (PermissionStyle entry : this.permissionStyle) {
             if (Permissions.check(source, entry.permission, entry.opLevel)) {
-                Text text = entry.style.getChat(player, message);
+                Text text = entry.style.getChat(player, message, channel);
                 if (text != null) {
                     return text;
                 }
             }
         }
-        return this.defaultStyle.getChat(player, message);
+        return this.defaultStyle.getChat(player, message, channel);
     }
 
-    public Text getJoin(ServerPlayerEntity player) {
+    public Text getJoin(ServerPlayerEntity player, ChatChannel channel) {
         ServerCommandSource source = player.getCommandSource();
         for (PermissionStyle entry : this.permissionStyle) {
             if (Permissions.check(source, entry.permission, entry.opLevel)) {
-                Text text = entry.style.getJoin(player);
+                Text text = entry.style.getJoin(player, channel);
                 if (text != null) {
                     return text;
                 }
             }
         }
-        return this.defaultStyle.getJoin(player);
+        return this.defaultStyle.getJoin(player, channel);
     }
 
-    public Text getJoinFirstTime(ServerPlayerEntity player) {
+    public Text getJoinFirstTime(ServerPlayerEntity player, ChatChannel channel) {
         ServerCommandSource source = player.getCommandSource();
         for (PermissionStyle entry : this.permissionStyle) {
             if (Permissions.check(source, entry.permission, entry.opLevel)) {
-                Text text = entry.style.getJoinFirstTime(player);
+                Text text = entry.style.getJoinFirstTime(player, channel);
                 if (text != null) {
                     return text;
                 }
             }
         }
-        Text text = this.defaultStyle.getJoinFirstTime(player);
+        Text text = this.defaultStyle.getJoinFirstTime(player, channel);
         if (text != null) {
             return text;
         }
-        return this.getJoin(player);
+        return this.getJoin(player, channel);
     }
 
-    public Text getJoinRenamed(ServerPlayerEntity player, String oldName) {
+    public Text getJoinRenamed(ServerPlayerEntity player, String oldName, ChatChannel channel) {
         ServerCommandSource source = player.getCommandSource();
         for (PermissionStyle entry : this.permissionStyle) {
             if (Permissions.check(source, entry.permission, entry.opLevel)) {
-                Text text = entry.style.getJoinRenamed(player, oldName);
+                Text text = entry.style.getJoinRenamed(player, oldName, channel);
                 if (text != null) {
                     return text;
                 }
             }
         }
-        return this.defaultStyle.getJoinRenamed(player, oldName);
+        return this.defaultStyle.getJoinRenamed(player, oldName, channel);
     }
 
-    public Text getLeft(ServerPlayerEntity player) {
+    public Text getLeft(ServerPlayerEntity player, ChatChannel channel) {
         ServerCommandSource source = player.getCommandSource();
         for (PermissionStyle entry : this.permissionStyle) {
             if (Permissions.check(source, entry.permission, entry.opLevel)) {
-                Text text = entry.style.getLeft(player);
+                Text text = entry.style.getLeft(player, channel);
                 if (text != null) {
                     return text;
                 }
             }
         }
-        return this.defaultStyle.getLeft(player);
+        return this.defaultStyle.getLeft(player, channel);
     }
 
-    public Text getDeath(ServerPlayerEntity player, Text vanillaMessage) {
+    public Text getDeath(ServerPlayerEntity player, Text vanillaMessage, ChatChannel channel) {
         ServerCommandSource source = player.getCommandSource();
         for (PermissionStyle entry : this.permissionStyle) {
             if (Permissions.check(source, entry.permission, entry.opLevel)) {
-                Text text = entry.style.getDeath(player, vanillaMessage);
+                Text text = entry.style.getDeath(player, vanillaMessage, channel);
                 if (text != null) {
                     return text;
                 }
             }
         }
-        return this.defaultStyle.getDeath(player, vanillaMessage);
+        return this.defaultStyle.getDeath(player, vanillaMessage, channel);
     }
 
-    public Text getAdvancementTask(ServerPlayerEntity player, Text advancement) {
+    public Text getAdvancementTask(ServerPlayerEntity player, Text advancement, ChatChannel channel) {
         ServerCommandSource source = player.getCommandSource();
         for (PermissionStyle entry : this.permissionStyle) {
             if (Permissions.check(source, entry.permission, entry.opLevel)) {
-                Text text = entry.style.getAdvancementTask(player, advancement);
+                Text text = entry.style.getAdvancementTask(player, advancement, channel);
                 if (text != null) {
                     return text;
                 }
             }
         }
-        return this.defaultStyle.getAdvancementTask(player, advancement);
+        return this.defaultStyle.getAdvancementTask(player, advancement, channel);
     }
 
-    public Text getAdvancementGoal(ServerPlayerEntity player, Text advancement) {
+    public Text getAdvancementGoal(ServerPlayerEntity player, Text advancement, ChatChannel channel) {
         ServerCommandSource source = player.getCommandSource();
         for (PermissionStyle entry : this.permissionStyle) {
             if (Permissions.check(source, entry.permission, entry.opLevel)) {
-                Text text = entry.style.getAdvancementGoal(player, advancement);
+                Text text = entry.style.getAdvancementGoal(player, advancement, channel);
                 if (text != null) {
                     return text;
                 }
             }
         }
-        return this.defaultStyle.getAdvancementGoal(player, advancement);
+        return this.defaultStyle.getAdvancementGoal(player, advancement, channel);
     }
 
-    public Text getAdvancementChallenge(ServerPlayerEntity player, Text advancement) {
+    public Text getAdvancementChallenge(ServerPlayerEntity player, Text advancement, ChatChannel channel) {
         ServerCommandSource source = player.getCommandSource();
         for (PermissionStyle entry : this.permissionStyle) {
             if (Permissions.check(source, entry.permission, entry.opLevel)) {
-                Text text = entry.style.getAdvancementChallenge(player, advancement);
+                Text text = entry.style.getAdvancementChallenge(player, advancement, channel);
                 if (text != null) {
                     return text;
                 }
             }
         }
-        return this.defaultStyle.getAdvancementChallenge(player, advancement);
+        return this.defaultStyle.getAdvancementChallenge(player, advancement, channel);
     }
 
     public Text getSayCommand(ServerCommandSource source, Text message) {
@@ -303,13 +302,15 @@ public final class Config {
         return this.defaultStyle.getTeamChatReceived(team, displayName, message, placeholderContext);
     }
 
-    public Text getPetDeath(TameableEntity entity, Text vanillaMessage) {
+    public Text getPetDeath(TameableEntity entity, Text vanillaMessage, ChatChannel channel) {
         if (this.petDeathMessage == null) {
             return null;
         }
 
+		Config config = ConfigManager.getConfig();
+
         return PlaceholderAPI.parsePredefinedText(
-                PlaceholderAPI.parseText(this.petDeathMessage, entity.getServer()),
+                PlaceholderAPI.parseText(StyledChatUtils.parseText((channel == null ? "" : channel.prefix) + config.configData.petDeathMessage), entity.getServer()),
                 PlaceholderAPI.PREDEFINED_PLACEHOLDER_PATTERN,
                 Map.of("pet", entity.getDisplayName(),
                         "default_message", vanillaMessage)

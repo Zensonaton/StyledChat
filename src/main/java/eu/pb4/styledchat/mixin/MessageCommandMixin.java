@@ -1,5 +1,15 @@
 package eu.pb4.styledchat.mixin;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.Consumer;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Redirect;
+
 import eu.pb4.placeholders.PlaceholderAPI;
 import eu.pb4.placeholders.TextParser;
 import eu.pb4.styledchat.StyledChatUtils;
@@ -8,15 +18,6 @@ import net.minecraft.server.command.MessageCommand;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
-
-import java.util.Collection;
-import java.util.Map;
-import java.util.UUID;
-import java.util.function.Consumer;
 
 @Mixin(MessageCommand.class)
 public class MessageCommandMixin {
@@ -51,7 +52,7 @@ public class MessageCommandMixin {
     }
 
     @Redirect(method = "execute", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V"))
-    private static <T> void styledChat_redirectSending(Consumer consumer, T t, ServerCommandSource source, Collection<ServerPlayerEntity> targets, Text message) {
+    private static <T> void styledChat_redirectSending(Consumer<T> consumer, T t, ServerCommandSource source, Collection<ServerPlayerEntity> targets, Text message) {
         var entity = source.getEntity();
 
         var receiver = (Text) t;

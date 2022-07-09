@@ -1,16 +1,16 @@
 package eu.pb4.styledchat.mixin;
 
-import eu.pb4.styledchat.StyledChatUtils;
-import net.minecraft.network.MessageType;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import java.util.UUID;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.UUID;
+import eu.pb4.styledchat.StyledChatUtils;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 
 @Mixin(MinecraftServer.class)
 public class MinecraftServerMixin {

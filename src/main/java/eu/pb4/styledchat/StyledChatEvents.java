@@ -1,12 +1,13 @@
 package eu.pb4.styledchat;
 
+import java.util.function.BiConsumer;
+
 import eu.pb4.placeholders.TextParser;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-
-import java.util.function.BiConsumer;
 
 public class StyledChatEvents {
     /**
@@ -64,6 +65,6 @@ public class StyledChatEvents {
     }
 
     public interface MessageToEvent {
-        Text onMessageTo(Text message, ServerPlayerEntity sender, ServerPlayerEntity receiver, boolean filtered);
+        Text onMessageTo(Text message, Entity sender, Entity receiver, boolean filtered);
     }
 }
