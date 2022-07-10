@@ -14,18 +14,7 @@ import net.minecraft.util.Formatting;
 
 public class ConfigData {
     public int CONFIG_VERSION_DONT_TOUCH_THIS = ConfigManager.VERSION;
-    public String _comment = "Before changing anything, see https://github.com/Patbox/StyledChat#configuration";
-	public List<String> __comment = Arrays.asList(
-		"Description of a Chat Channels feature:",
-		"",
-		"'enabled' specifies if this channel is enabled or not.",
-		"'isDefault' specifies whenever channel should be used by default in certain situations. See 'usagePrefix' for more info.",
-		"'radius' radius, in which players can 'hear' eachother. Values less than 1 counts as infinity.",
-		"'onlyInSameDimension' specifies, if players can 'hear' eachother if they are in the same dimension.",
-		"'usagePrefix' prefix used for sending message in this channel. For example, value of '!' will make all messages starting with '!' to be sent in this channel. After sending, '!' will be removed automatically from sent message.",
-		"'prefix' prefix for sent message. E.g., if prefix is set to '[Global] ', then all messages in this channel will look like this: '[Global] <Username> message'.",
-		"'messageTypesIncluded' types for messages that will be sent in this channel. Valid values are: ['chat', 'death', 'tameable_death', 'advancement_challenge', 'advancement_task', 'advancement_goal', 'leave', 'join', 'join_first_time', 'join_renamed']"
-	);
+    public String _comment = "Before changing anything, see https://github.com/Zensonaton/StyledChat#configuration";
     public ChatStyleData defaultStyle = ChatStyleData.DEFAULT;
     public List<PermissionPriorityStyle> permissionStyles = new ArrayList<>();
     public String petDeathMessage = "${default_message}";
