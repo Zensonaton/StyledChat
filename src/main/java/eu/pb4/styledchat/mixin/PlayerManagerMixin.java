@@ -9,12 +9,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import eu.pb4.styledchat.StyledChatMod;
 import eu.pb4.styledchat.StyledChatUtils;
 import eu.pb4.styledchat.StyledChatUtils.MessageActionType;
 import eu.pb4.styledchat.config.Config;
 import eu.pb4.styledchat.config.ConfigManager;
 import eu.pb4.styledchat.config.data.ConfigData.ChatChannel;
+import net.minecraft.command.CommandSource;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.MessageType;
 import net.minecraft.server.PlayerManager;
@@ -39,22 +39,21 @@ public class PlayerManagerMixin {
 		Config config = ConfigManager.getConfig();
 		ChatChannel channel = null;
 		Text message = null;
+		CommandSource source = this.temporaryPlayer.getCommandSource();
 
 		if (this.temporaryPlayer.getStatHandler().getStat(Stats.CUSTOM.getOrCreateStat(Stats.LEAVE_GAME)) == 0) {
-			channel = StyledChatUtils.getChatChannel(null, MessageActionType.JOIN_FIRST_TIME);
+			channel = StyledChatUtils.getChatChannel(null, MessageActionType.JOIN_FIRST_TIME, source);
 			message = config.getJoinFirstTime(this.temporaryPlayer, channel);
 		}
 
 		Object[] args = ((TranslatableText) this.connectText).getArgs();
         if (args.length == 1) {
-			channel = StyledChatUtils.getChatChannel(null, MessageActionType.JOIN);
-            message = config.getJoin(this.temporaryPlayer, StyledChatUtils.getChatChannel(null, MessageActionType.JOIN));
+			channel = StyledChatUtils.getChatChannel(null, MessageActionType.JOIN, source);
+            message = config.getJoin(this.temporaryPlayer, channel);
         } else {
-			channel = StyledChatUtils.getChatChannel(null, MessageActionType.JOIN_RENAMED);
-            message = config.getJoinRenamed(this.temporaryPlayer, (String) args[1], StyledChatUtils.getChatChannel(null, MessageActionType.JOIN_RENAMED));
+			channel = StyledChatUtils.getChatChannel(null, MessageActionType.JOIN_RENAMED, source);
+            message = config.getJoinRenamed(this.temporaryPlayer, (String) args[1], channel);
         }
-
-		StyledChatMod.LOGGER.info(this.temporaryPlayer.getPos());
 
 		StyledChatUtils.broadcast(
 			player.getServer().getPlayerManager(),

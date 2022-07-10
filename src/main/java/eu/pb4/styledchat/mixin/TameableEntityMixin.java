@@ -22,7 +22,7 @@ public class TameableEntityMixin {
     private void styledChat_onTameableDeath(LivingEntity diedEntity, Text text, UUID uuid) {
 		Config config = ConfigManager.getConfig();
 
-		ChatChannel channel = StyledChatUtils.getChatChannel(null, MessageActionType.TAMEABLE_DEATH);
+		ChatChannel channel = StyledChatUtils.getChatChannel(null, MessageActionType.TAMEABLE_DEATH, null);
 
 		StyledChatUtils.broadcast(
 			diedEntity.getServer().getPlayerManager(),

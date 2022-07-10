@@ -16,6 +16,7 @@ import eu.pb4.styledchat.config.Config;
 import eu.pb4.styledchat.config.ConfigManager;
 import eu.pb4.styledchat.config.data.ConfigData.ChatChannel;
 import me.lucko.fabric.api.permissions.v0.Permissions;
+import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.MessageType;
 import net.minecraft.server.MinecraftServer;
@@ -251,7 +252,7 @@ public final class StyledChatUtils {
 	 * @return Channel, in which message should be sent.
 	 * @param actionType Any of next ones: <code>chat, death, tameable_death, advancement_challenge, advancement_task, advancement_goal, leave, join, join_first_time, join_renamed</code>.
 	 */
-	public static ChatChannel getChatChannel(String text, MessageActionType actionType) {
+	public static ChatChannel getChatChannel(String text, MessageActionType actionType, CommandSource source) {
 		Config config = ConfigManager.getConfig();
 		ChatChannel defaultChannel = null;
 
@@ -262,9 +263,11 @@ public final class StyledChatUtils {
 		for (var channel : config.configData.chatChannels) {
 			if (!channel.enabled) continue;
 
-			if (!channel.messageTypesIncluded.contains(actionType.getValue())) continue;
-
 			if (channel.isDefault) defaultChannel = channel;
+
+			if (!channel.messageTypesIncluded.contains(actionType.getValue())) continue;
+			if (source != null && !Permissions.check(source, channel.permission, channel.opLevel)) continue;
+
 
 			if (text.startsWith(channel.usagePrefix)) return channel;
 		}

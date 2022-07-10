@@ -34,7 +34,7 @@ public class ServerPlayNetworkManagerMixin {
     private void styledChat_onDisconnectedBroadcast(PlayerManager playerManager, Text text, MessageType type, UUID sender) {
 		Config config = ConfigManager.getConfig();
 
-		ChatChannel channel = StyledChatUtils.getChatChannel(null, MessageActionType.LEAVE);
+		ChatChannel channel = StyledChatUtils.getChatChannel(null, MessageActionType.LEAVE, this.player.getCommandSource());
 
 		StyledChatUtils.broadcast(
 			playerManager,
@@ -56,7 +56,7 @@ public class ServerPlayNetworkManagerMixin {
         String filteredMessage = message.getFiltered();
 
 		// Get the chat channel:
-		ChatChannel channel = StyledChatUtils.getChatChannel(rawMessage, MessageActionType.CHAT);
+		ChatChannel channel = StyledChatUtils.getChatChannel(rawMessage, MessageActionType.CHAT, this.player.getCommandSource());
 		boolean chatChannelsEnablement = channel != null && config.configData.chatChannelsEnabled;
 
         // You might say, that it's useless and you would be kinda right

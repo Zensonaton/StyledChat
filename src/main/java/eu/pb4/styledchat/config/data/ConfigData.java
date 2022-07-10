@@ -122,6 +122,8 @@ public class ConfigData {
 	public static class ChatChannel {
 		public boolean enabled = true;
 		public boolean isDefault = false;
+        public String permission = "";
+        public int opLevel = 0;
 		public int radius = 0;
 		public boolean onlyInSameDimension = false;
 		public String usagePrefix = "";

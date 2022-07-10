@@ -23,7 +23,7 @@ import net.minecraft.text.TranslatableText;
 public class ServerPlayerEntityMixin {
 	@Redirect(method = "onDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/PlayerManager;broadcast(Lnet/minecraft/text/Text;Lnet/minecraft/network/MessageType;Ljava/util/UUID;)V"))
 	private void styledChat_onDeathBroadcast(PlayerManager playerManager, Text message, MessageType type, UUID sender) {
-		ChatChannel channel = StyledChatUtils.getChatChannel(null, MessageActionType.DEATH);
+		ChatChannel channel = StyledChatUtils.getChatChannel(null, MessageActionType.DEATH, ((ServerPlayerEntity) (Object) this).getCommandSource());
 
 		StyledChatUtils.broadcast(
 			playerManager,
