@@ -1,8 +1,15 @@
+# Fork of a [Styled Chat mod](https://github.com/Patbox/StyledChat), modified for the chat channels system support.
+
+**Look at the bottom of this page for more info.**
+
+---
+
+
 ![Logo](https://i.imgur.com/DC12A5i.png)
 # Styled Chat
 It's a simple mod that allows server owners to change how their chat looks!
 
-It adds support for [modern chat formatting](https://placeholders.pb4.eu/user/text-format/) supported by Minecraft, 
+It adds support for [modern chat formatting](https://placeholders.pb4.eu/user/text-format/) supported by Minecraft,
 but ignored by many chat mods/plugins.
 
 It's also compatible with any mods using [Placeholder API](https://placeholders.pb4.eu/user/general/).
@@ -41,7 +48,7 @@ Additionally, every message type has few own local variables.
     "death": "...",                 // Player death message (local variables: ${player}, ${default_message})
     "advancementTask": "...",       // Finishing advancement task (local variables: ${player}, ${advancement})
     "advancementChallenge": "...",  // Finishing advancement challenge (local variables: ${player}, ${advancement})
-    "advancementGoal": "...",       // Finishing advancement goal (local variables: ${player}, ${advancement}) 
+    "advancementGoal": "...",       // Finishing advancement goal (local variables: ${player}, ${advancement})
     "teamChatSent": "...",          // Team message, visible to player sending it (local variables: ${team}, ${displayName}, ${message})
     "teamChatReceived": "...",      // Team message, visible to other team members (local variables: ${team}, ${displayName}, ${message})
     "privateMessageSent": "...",    // Private message, visible to player sending (local variables: ${receiver}, ${sender}, ${message})
@@ -55,7 +62,7 @@ Additionally, every message type has few own local variables.
       "opLevel": 3,                 // Minimal required op level, set it to 5+ to disable it
       "style": {
         // The same values as in "defaultStyle", however it will handle missing ones just fine
-        // By applying next valid 
+        // By applying next valid
       }
     } // You can have as many permission overrides as possible
       // Just remember to have most important ones above least (so for example Admin, Moderator, Helper)
@@ -81,11 +88,26 @@ Additionally, every message type has few own local variables.
   "linkStyle": "...",                  // Style of link (local variables: ${link})
   "spoilerStyle": "...",               // Style of spoilers (local variables: ${spoiler})
   "spoilerSymbol": "▌",                // Spoiler symbol used in spoiler style
-  
+
   "defaultEnabledFormatting": {
     "type": false
     // Here you can change which formatting is available by default for player
-  }
+  },
+
+  "chatChannelsEnabled": false,
+  "chatChannels": [
+    {
+      "enabled": true, // Whenever this chat channel is enabled or not.
+      "isDefault": false, // If `true`, then current chat channel will be used if mod haven't succeeded to find any. At least one chat channel should be 'default'.
+      "radius": 0, // Radius of this chat channel. Use 0 or lower for infinity.
+      "onlyInSameDimension": false, // Are messages going to be visible in same dimensions?
+      "usagePrefix": "!", // Usage prefix of this channel. If this character(-s) are found at the start of the sent message, then this channel will be forced to be used if other checks (like 'messageTypesIncluded') are succeeded.
+      "prefix": "[<b>GLOBAL</b>] ", // Prefix that will be added by this mod if message is sent in this channel.
+      "messageTypesIncluded": [ // Types of message types that will be included in this chat channel. Supported values are: 'chat', 'death', 'tameable_death', 'advancement_challenge', 'advancement_task', 'advancement_goal', 'leave', 'join', 'join_first_time', 'join_renamed'. Take a note that this setting is a check, this setting won't force to this chat channel if selected message type is here.
+        "chat"
+      ]
+    }
+  ]
 }
 ```
 
@@ -95,7 +117,7 @@ It supports all default ones with addition of `<item>` tag.
 
 
 ## Example config
-```json 
+```json5
 {
   "CONFIG_VERSION_DONT_TOUCH_THIS": 2,
   "_comment": "Before changing anything, see https://github.com/Patbox/StyledChat#configuration",
@@ -212,6 +234,31 @@ It supports all default ones with addition of `<item>` tag.
     "reset": false,
     "page": false,
     "font": false
-  }
+  },
+  "chatChannelsEnabled": false,
+  "chatChannels": [
+    { // Messages with "!" will be sent and visible for all players on the server.
+      "enabled": true,
+      "isDefault": false,
+      "radius": 0,
+      "onlyInSameDimension": false,
+      "usagePrefix": "!",
+      "prefix": "[<b><green>GLOBAL</green></b>] ",
+      "messageTypesIncluded": [
+        "chat"
+      ]
+    },
+    { // Other messages will be count as 'local', and those will be visible only in radius of 100 blocks.
+      "enabled": true,
+      "isDefault": true,
+      "radius": 100,
+      "onlyInSameDimension": true,
+      "usagePrefix": "",
+      "prefix": "[<blue>LOCAL</blue>] ",
+      "messageTypesIncluded": [
+        "chat", "death", "tameable_death", "advancement_challenge", "advancement_task", "advancement_goal", "leave", "join", "join_first_time", "join_renamed"
+      ]
+    }
+  ]
 }
 ```
