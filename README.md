@@ -99,6 +99,8 @@ Additionally, every message type has few own local variables.
     {
       "enabled": true, // Whenever this chat channel is enabled or not.
       "isDefault": false, // If `true`, then current chat channel will be used if mod haven't succeeded to find any. At least one chat channel should be 'default'.
+      "permission": "", // Permission string required to use.
+      "opLevel": 3, // Minimal required op level, set it to 5+ to disable it.
       "radius": 0, // Radius of this chat channel. Use 0 or lower for infinity.
       "onlyInSameDimension": false, // Are messages going to be visible in same dimensions?
       "usagePrefix": "!", // Usage prefix of this channel. If this character(-s) are found at the start of the sent message, then this channel will be forced to be used if other checks (like 'messageTypesIncluded') are succeeded.
@@ -240,10 +242,12 @@ It supports all default ones with addition of `<item>` tag.
     { // Messages with "!" will be sent and visible for all players on the server.
       "enabled": true,
       "isDefault": false,
+      "permission": "",
+      "opLevel": 0,
       "radius": 0,
       "onlyInSameDimension": false,
       "usagePrefix": "!",
-      "prefix": "[<b><green>GLOBAL</green></b>] ",
+      "prefix": "[<b><green><hover:'This message is shown to everyone in this server.'>GLOBAL</hover></green></b>] ",
       "messageTypesIncluded": [
         "chat"
       ]
@@ -251,10 +255,12 @@ It supports all default ones with addition of `<item>` tag.
     { // Other messages will be count as 'local', and those will be visible only in radius of 100 blocks.
       "enabled": true,
       "isDefault": true,
+      "permission": "",
+      "opLevel": 0,
       "radius": 100,
       "onlyInSameDimension": true,
       "usagePrefix": "",
-      "prefix": "[<blue>LOCAL</blue>] ",
+      "prefix": "[<blue><hover:'This message is shown to players in radius of <gold>100</gold> blocks from the sender.'>LOCAL</hover></blue>] ",
       "messageTypesIncluded": [
         "chat", "death", "tameable_death", "advancement_challenge", "advancement_task", "advancement_goal", "leave", "join", "join_first_time", "join_renamed"
       ]
